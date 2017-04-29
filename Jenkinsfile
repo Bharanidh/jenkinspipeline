@@ -1,22 +1,28 @@
 pipeline {
   agent any
   stages {
-    stage('Build and Deploy') {
+    stage('Build & unit tests') {
       steps {
-        echo 'building'
+        echo 'running build and unit tests'
       }
     }
-    stage('Deploy to Test?') {
+    stage('Automated Acceptance tests') {
+      steps {
+        echo 'running automated acceptance tests'
+      }
+    }
+    stage('User acceptance tests') {
       steps {
         timeout(time: 30, unit: 'DAYS') {
-          input 'Deploy to Test?'
+          input 'Deploy to Stage?'
         }
         
+        echo 'User acceptance tests ok, deploying to LIVE'
       }
     }
-    stage('Deploy') {
+    stage('Release') {
       steps {
-        echo 'deploying'
+        echo 'deplying to live; running smoke tests'
       }
     }
   }
