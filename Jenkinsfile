@@ -14,19 +14,19 @@ pipeline {
         //archiveArtifacts
         //stash
       }
-			post {
-				always{
-          //publish unit tests
-					//junit 'path/to/tests/*.xml'
-				}
-			}
+      post {
+      	always{
+      	//publish unit tests
+      	//junit 'path/to/tests/*.xml'
+      	}
+      }
     }
     stage('Automated Acceptance tests') {
       agent any
-			tools { //this is ignored at top level if agent none is specified.
+      tools { //this is ignored at top level if agent none is specified.
         //see pipeline block https://jenkins.io/doc/book/pipeline/syntax/
-				//jdk 'Oracle Java 8' (defined in jenkins setup)
-			}
+      	//jdk 'Oracle Java 8' (defined in jenkins setup)
+      }
       steps {
         echo 'running automated acceptance tests'
         //unstash        
@@ -64,8 +64,9 @@ pipeline {
           for (int i = 0; i < hosts.size(); ++i) {
             echo "Deploying to ${hosts[i]}"
           }        
-      }   
-    }  
+        }   
+      }
+    }
     stage('Deploy LIVE?') {
       when { branch 'master' } //only do this on master      
       steps {
@@ -85,15 +86,15 @@ pipeline {
       }
     }
   }
-	post {
-    //feedback on failure (also always, success, unstable, changed available)
-		failure {
-			emailext (
-					subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-					body: """<p>FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-							<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
-					recipientProviders: [[$class: 'CulpritsRecipientProvider']]
-			)
-		}
-	}
+  post {
+  //feedback on failure (also always, success, unstable, changed available)
+   failure {
+    emailext (
+     subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+     body: """<p>FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+     <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+     recipientProviders: [[$class: 'CulpritsRecipientProvider']]
+     )
+   }
+  }
 }
