@@ -46,7 +46,7 @@ pipeline {
       steps {
         milestone(1)        
         timeout(time: 30, unit: 'DAYS') {
-          input message: 'Deploy to Stage?', submitter: 'admins,tom.tester,pete.pm'
+          input message: 'Deploy to Stage?', submitter: 'admin,tom.tester,pete.pm'
         }
         milestone(2)        
       }
@@ -72,7 +72,7 @@ pipeline {
       steps {
         milestone(3)     
         timeout(time: 30, unit: 'DAYS') {
-          input message:'Deploy to Live?', submitter:'admins'
+          input message:'Deploy to Live?', submitter:'admin'
         }
         milestone(4)
       }
