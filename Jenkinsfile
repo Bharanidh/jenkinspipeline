@@ -14,27 +14,27 @@ pipeline {
         //archiveArtifacts
         //stash
       }
-      post {
-      	always{
+//    post {
+//     always{
       	//publish unit tests
-      	//junit 'path/to/tests/*.xml'
-      	}
-      }
+//      //junit 'path/to/tests/*.xml'
+//     }
+//      }
     }
     stage('Automated Acceptance tests') {
       agent any
-      tools { //this is ignored at top level if agent none is specified.
+//      tools { //this is ignored at top level if agent none is specified.
         //see pipeline block https://jenkins.io/doc/book/pipeline/syntax/
       	//jdk 'Oracle Java 8' (defined in jenkins setup)
-      }
+//      }
       steps {
-        echo 'running automated acceptance tests'
-        //unstash        
         parallel (
           "Firefox" : {
+            //unstash        
             echo "testing FFX"
           },
           "Chrome" : {
+            //unstash
             echo "testing chrome"
 	  }
         )        
@@ -46,7 +46,7 @@ pipeline {
       steps {
         milestone(1)        
         timeout(time: 30, unit: 'DAYS') {
-          input 'Deploy to Stage?', submitter: 'admins,tom.tester,pete.pm'
+          input message: 'Deploy to Stage?', submitter: 'admins,tom.tester,pete.pm'
         }
         milestone(2)        
       }
@@ -72,7 +72,7 @@ pipeline {
       steps {
         milestone(3)     
         timeout(time: 30, unit: 'DAYS') {
-          input 'Deploy to Live?', submitter:'admins'
+          input message:'Deploy to Live?', submitter:'admins'
         }
         milestone(4)
       }
