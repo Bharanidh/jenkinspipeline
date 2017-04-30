@@ -36,6 +36,7 @@ pipeline {
           },
           "Chrome" : {
             echo "testing chrome"
+	  }
         )        
       }
       //publish unit tests (omitted here)
