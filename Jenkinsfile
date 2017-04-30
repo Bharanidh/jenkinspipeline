@@ -1,11 +1,16 @@
 pipeline {
   agent none	//don't block an executor for approval
-  //see http://stackoverflow.com/questions/42159221/use-a-lightweight-executor-for-a-declarative-pipeline-stage-agent-none
-  // environment, options, tools, parameters and triggers can also be defined here for the whole pipeline
+  //see http://bit.ly/2qrz2Ty
+  // environment, options, tools, parameters
+  //and triggers can also be defined here for the whole pipeline
   options { disableConcurrentBuilds() }
   stages {
     stage('Build & unit tests') {
       agent any
+//      tools { 
+	//this is ignored at top level if agent none is specified.
+      	//jdk 'Oracle Java 8' (defined in jenkins setup)
+//      }	    
       steps {
         echo 'running build and unit tests'
         deleteDir() //delete everything in this workspace
@@ -19,14 +24,10 @@ pipeline {
       	//publish unit tests
 //      //junit 'path/to/tests/*.xml'
 //     }
-//      }
+//    }
     }
     stage('Automated Acceptance tests') {
       agent any
-//      tools { //this is ignored at top level if agent none is specified.
-        //see pipeline block https://jenkins.io/doc/book/pipeline/syntax/
-      	//jdk 'Oracle Java 8' (defined in jenkins setup)
-//      }
       steps {
         parallel (
           "Firefox" : {
@@ -92,7 +93,8 @@ pipeline {
     emailext (
      subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
      body: """<p>FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-     <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+     	<p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>
+	${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
      recipientProviders: [[$class: 'CulpritsRecipientProvider']]
      )
    }
