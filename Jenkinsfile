@@ -3,7 +3,11 @@ pipeline {
   //see http://bit.ly/2qrz2Ty
   // environment, options, tools, parameters
   //and triggers can also be defined here for the whole pipeline
-  options { disableConcurrentBuilds() }
+  options {
+  		timeout(time: 60, unit: 'DAYS')
+		timestamps()
+		buildDiscarder(logRotator(numToKeepStr: '30'))
+  }
   stages {
     stage('Build & unit tests') {
       agent any
@@ -26,22 +30,22 @@ pipeline {
 //     }
 //    }
     }
-    stage('Automated Acceptance tests') {
-      agent any
-      steps {
-        parallel (
-          "Firefox" : {
-            //unstash        
-            echo "testing FFX"
-          },
-          "Chrome" : {
-            //unstash
-            echo "testing chrome"
-	  }
-        )        
-      }
-      //publish unit tests (omitted here)
-    }
+    parallel{ //since declarative pipelines 1.2
+	    stage('Automated Acceptance tests'){
+	    	agent any
+		steps{
+			echo "testing Firefox"
+		}
+		//publish unit tests (omitted here)
+	    }
+	    stage('Automated Acceptance tests'){
+	    	agent any
+		steps{
+			echo "testing Firefox"
+		}
+		//publish unit tests (omitted here)		    
+	    }	    
+    } 
     stage('Deploy to Stage for User acceptance tests') {
       when { branch 'master' } //only offer this option on master
       steps {
