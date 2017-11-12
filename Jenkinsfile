@@ -3,7 +3,7 @@ pipeline {
   //see http://bit.ly/2qrz2Ty
   // environment, options, tools, parameters
   //and triggers can also be defined here for the whole pipeline
-  triggers { pollSCM('H 4/* 0 0 1-5') }
+  triggers { pollSCM('H/5 * * * *') } // poll every 5 mins
   options {
   		timeout(time: 60, unit: 'DAYS')
 		timestamps()
