@@ -6,7 +6,6 @@ pipeline {
   triggers { pollSCM('H/5 * * * *') } // poll every 5 mins
   options {
   		timeout(time: 60, unit: 'DAYS')
-		timestamps()
 		buildDiscarder(logRotator(numToKeepStr: '30'))
   }
   stages {
@@ -36,6 +35,7 @@ pipeline {
 	    stage('Automated Acceptance tests Firefox'){
 	    	agent any
 		steps{
+			// unstash
 			echo "testing Firefox"
 		}
 		//publish unit tests (omitted here)
@@ -43,6 +43,7 @@ pipeline {
 	    stage('Automated Acceptance tests chrome'){
 	    	agent any
 		steps{
+			// unstash
 			echo "testing chrome"
 		}
 		//publish unit tests (omitted here)		    
