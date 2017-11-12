@@ -30,22 +30,24 @@ pipeline {
 //     }
 //    }
     }
-    parallel{ //since declarative pipelines 1.2
-	    stage('Automated Acceptance tests'){
+    stage('Automated Acceptance tests'){
+    	parallel{ //since declarative pipelines 1.2
+	    stage('Automated Acceptance tests Firefox'){
 	    	agent any
 		steps{
 			echo "testing Firefox"
 		}
 		//publish unit tests (omitted here)
 	    }
-	    stage('Automated Acceptance tests'){
+	    stage('Automated Acceptance tests chrome'){
 	    	agent any
 		steps{
-			echo "testing Firefox"
+			echo "testing chrome"
 		}
 		//publish unit tests (omitted here)		    
 	    }	    
-    } 
+    	}
+    }	    
     stage('Deploy to Stage for User acceptance tests') {
       when { branch 'master' } //only offer this option on master
       steps {
