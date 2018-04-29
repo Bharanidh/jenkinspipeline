@@ -96,7 +96,7 @@ pipeline {
     }
   }
   post {
-  //feedback on failure (also always, success, unstable, changed available)
+  //feedback on failure (also always, success, unstable, changed, fixed, regression available)
    failure {
     emailext (
      subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
