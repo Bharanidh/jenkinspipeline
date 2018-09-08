@@ -1,12 +1,15 @@
 pipeline {
   agent none	//don't block an executor for approval
   //see http://bit.ly/2qrz2Ty
+  // using the recently released sequential stages is another alternative
+  // see https://bit.ly/2Qft0TS
   // environment, options, tools, parameters
   //and triggers can also be defined here for the whole pipeline
   triggers { pollSCM('H/5 * * * *') } // poll every 5 mins
   options {
   		timeout(time: 60, unit: 'DAYS')
 		buildDiscarder(logRotator(numToKeepStr: '30'))
+		preserveStashes() //preserve stages of most recent build
   }
   stages {
     stage('Build & unit tests') {
@@ -22,6 +25,10 @@ pipeline {
         //sh './gradlew build'
         //archiveArtifacts
         //stash
+        //use stash and unstash to copy files between stages
+        //instead you could also use sequential stages
+	    // to ensure that the build is run in the same workspace
+		// see https://bit.ly/2Qft0TS)
       }
 //    post {
 //     always{
@@ -90,8 +97,12 @@ pipeline {
       when { branch 'master' } //only do this on master      
       agent any      
       steps {
-        //unstash        
+        //unstash     
         echo 'deploying to live and running smoke tests'
+        script{
+	    //keep released builds their logs and artifacts forever
+            currentBuild.setKeepLog(true)
+        }
       }
     }
   }
