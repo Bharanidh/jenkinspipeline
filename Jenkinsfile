@@ -9,7 +9,7 @@ pipeline {
   options {
   		timeout(time: 60, unit: 'DAYS')
 		buildDiscarder(logRotator(numToKeepStr: '30'))
-		preserveStashes() //preserve stages of most recent build
+		preserveStashes() //preserve stashes of most recent build
   }
   stages {
     stage('Build & unit tests') {
