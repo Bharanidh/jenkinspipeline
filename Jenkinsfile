@@ -10,6 +10,7 @@ pipeline {
   		timeout(time: 60, unit: 'DAYS')
 		buildDiscarder(logRotator(numToKeepStr: '30'))
 		preserveStashes() //preserve stashes of most recent build
+		skipDefaultCheckout()
   }
   environment {
         commitHash = '' //create environment variable
