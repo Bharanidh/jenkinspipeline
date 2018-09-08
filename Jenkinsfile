@@ -1,3 +1,4 @@
+def commitHash="" //workaround from https://issues.jenkins-ci.org/browse/JENKINS-41335
 pipeline {
   agent none	//don't block an executor for approval
   //see http://bit.ly/2qrz2Ty
@@ -12,9 +13,6 @@ pipeline {
 		preserveStashes() //preserve stashes of most recent build
 		skipDefaultCheckout()
   }
-  environment {
-        commitHash = '' //create environment variable
-  }  
   stages {
     stage('Build & unit tests') {
       agent any
