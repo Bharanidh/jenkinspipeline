@@ -1,9 +1,9 @@
 pipeline {
   agent none	//don't block an executor for approval
   //see http://bit.ly/2qrz2Ty
-  // using the recently released sequential stages is another alternative
-  // see https://bit.ly/2Qft0TS
-  // environment, options, tools, parameters
+  //using the recently released sequential stages is another alternative
+  //see https://bit.ly/2Qft0TS
+  //environment, options, tools, parameters
   //and triggers can also be defined here for the whole pipeline
   triggers { pollSCM('H/5 * * * *') } // poll every 5 mins
   options {
