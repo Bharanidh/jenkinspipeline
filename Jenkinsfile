@@ -11,29 +11,32 @@ pipeline {
 		buildDiscarder(logRotator(numToKeepStr: '30'))
 		preserveStashes() //preserve stashes of most recent build
   }
+  environment {
+        commitHash = '' //create environment variable
+  }  
   stages {
     stage('Build & unit tests') {
       agent any
-//      tools { 
-	//this is ignored at top level if agent none is specified.
-      	//jdk 'Oracle Java 8' (defined in jenkins setup)
-//      }	    
+      // tools is ignored at top level if agent none is specified!
       steps {
         echo 'running build and unit tests'
         deleteDir() //delete everything in this workspace
-        checkout scm
+        script {
+            commitHash = checkout(scm).GIT_COMMIT
+            echo "${commitHash} was checked out"
+        }
         //sh './gradlew build'
         //archiveArtifacts
         //stash
         //use stash and unstash to copy files between stages
-        //instead you could also use sequential stages
-	    // to ensure that the build is run in the same workspace
-		// see https://bit.ly/2Qft0TS)
+        //(instead you could also use sequential stages
+	//to ensure that the build is run in the same workspace
+	//see https://bit.ly/2Qft0TS)
       }
 //    post {
 //     always{
       	//publish unit tests
-//      //junit 'path/to/tests/*.xml'
+        //junit 'path/to/tests/*.xml'
 //     }
 //    }
     }
@@ -72,7 +75,6 @@ pipeline {
       agent any
       steps {
         //unstash                
-        //you could tag your code here
         echo 'deploying to stage; running smoke tests'
         script { //switching to the more powerful scripted DSL
           //for script blocks of non-trivial size and/or complexity use Shared Libraries
@@ -100,6 +102,8 @@ pipeline {
         //unstash     
         echo 'deploying to live and running smoke tests'
         script{
+	    //you could tag your code here
+            echo "${commitHash} was released"
 	    //keep released builds their logs and artifacts forever
             currentBuild.setKeepLog(true)
         }
