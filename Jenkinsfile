@@ -1,4 +1,3 @@
-def commitHash="" //workaround from https://issues.jenkins-ci.org/browse/JENKINS-41335
 pipeline {
   agent none	//don't block an executor for approval
   //see http://bit.ly/2qrz2Ty
@@ -20,10 +19,7 @@ pipeline {
       steps {
         echo 'running build and unit tests'
         deleteDir() //delete everything in this workspace
-        script {
-            commitHash = checkout(scm).GIT_COMMIT
-            echo "${commitHash} was checked out"
-        }
+        checkout(scm)
         //sh './gradlew build'
         //archiveArtifacts
         //stash
@@ -102,7 +98,6 @@ pipeline {
         echo 'deploying to live and running smoke tests'
         script{
 	    //you could tag your code here
-            echo "${commitHash} was released"
 	    //keep released builds their logs and artifacts forever
             currentBuild.setKeepLog(true)
         }
