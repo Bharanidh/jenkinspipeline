@@ -25,8 +25,8 @@ pipeline {
         //stash
         //use stash and unstash to copy files between stages
         //(instead you could also use sequential stages
-	//to ensure that the build is run in the same workspace
-	//see https://bit.ly/2Qft0TS)
+        //to ensure that the build is run in the same workspace
+        //see https://bit.ly/2Qft0TS)
       }
 //    post {
 //     always{
