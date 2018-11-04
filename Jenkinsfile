@@ -18,6 +18,7 @@ pipeline {
       // tools is ignored at top level if agent none is specified!
       steps {
         echo 'running build and unit tests'
+	echo 'hello devops pro moscow'	      
         deleteDir() //delete everything in this workspace
         checkout(scm)
         //sh './gradlew build'
